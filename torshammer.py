@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# this is a fork for python 3.x
+#
 # this assumes you have the socks.py (http://phiral.net/socks.py) 
 # and terminal.py (http://phiral.net/terminal.py) in the
 # same directory and that you have tor running locally 
