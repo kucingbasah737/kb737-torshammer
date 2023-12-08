@@ -76,7 +76,7 @@ class httpPost(Thread):
             if stop_now:
                 self.running = False
                 break
-            p = random.choice(string.letters+string.digits)
+            p = random.choice(string.ascii_letters+string.digits)
             print(term.BOL+term.UP+term.CLEAR_EOL+"Posting: %s" % p+term.NORMAL)
             self.socks.send(p)
             time.sleep(random.uniform(0.1, 3))
