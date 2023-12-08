@@ -22,6 +22,11 @@ cd kb737-torshammer
 python torshammer.py
 ```
 
+or:
+```console
+python3 torshamer.py
+```
+
 ```
 ./torshammer.py -t <target> [-r <threads>] [-p <port>] [-T] [-S <sockshost> -P <socksport>] [-i <seconds>] [-s <seconds>] [-h]
  -t|--target <Hostname|IP>
