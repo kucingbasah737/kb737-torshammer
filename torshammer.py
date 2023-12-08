@@ -31,6 +31,7 @@ global presleepbetweenthreadstart
 presleepbetweenthreadstart = None
 
 global maxsecondsbetweenpacket
+global runningthreadcount
 
 useragents = [
     "curl/7.85.0"
@@ -382,6 +383,7 @@ class httpPost(Thread):
 
     def run(self):
         global presleepbetweenthreadstart
+        global runningthreadcount
 
         while self.running:
             while self.running:
@@ -394,7 +396,7 @@ class httpPost(Thread):
 
                     self.socks.connect((self.host, self.port))
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
-                    print("[%d] %s: Connected to host...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S')))
+                    print("[%d] %s: Connected to host (%d threads running)\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), runningthreadcount + 1))
                     break
                 except Exception as e:
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
@@ -411,7 +413,7 @@ class httpPost(Thread):
 
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("[%d] %s: Thread broken after sending %d packets, restarting in %f seconds ...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), self.sentcount, sleeptime))
+                        print("[%d] %s: Thread broken after sending %d packets (%s), restarting in %f seconds ...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), self.sentcount, e, sleeptime))
                         self.socks = socks.socksocket()
                         break
 
@@ -442,6 +444,7 @@ def main(argv):
     global stop_now
     global presleepbetweenthreadstart
     global maxsecondsbetweenpacket
+    global runningthreadcount
 
     target = ''
     threads = 256
@@ -486,8 +489,8 @@ def main(argv):
     print(term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL)
 
     rthreads = []
-    for i in range(threads):
-        t = httpPost(i, target, port, tor, sockshost, socksport)
+    for runningthreadcount in range(threads):
+        t = httpPost(runningthreadcount, target, port, tor, sockshost, socksport)
         rthreads.append(t)
         t.start()
         if presleepbetweenthreadstart:
