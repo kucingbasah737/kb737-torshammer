@@ -322,6 +322,9 @@ class socksocket(_BaseSocket):
         return sent - header.tell()
 
     def send(self, bytes, flags=0, **kwargs):
+        if isinstance(bytes, str):
+            bytes = bytes.encode("utf-8")
+
         if self.type == socket.SOCK_DGRAM:
             return self.sendto(bytes, flags, self.proxy_peername, **kwargs)
         else:
