@@ -413,7 +413,7 @@ class httpPost(Thread):
 
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("[%d] %s: Thread broken after sending %d packets (%s), restarting in %f seconds ...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), self.sentcount, e, sleeptime))
+                        print("[%d] %s: Thread broken after sending %d packets, restarting in %f seconds ...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), self.sentcount, sleeptime))
                         self.socks = socks.socksocket()
                         break
 
