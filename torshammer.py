@@ -94,12 +94,10 @@ class httpPost(Thread):
                     elif self.sockshost:
                         self.socks.set_proxy(socks.SOCKS5, self.sockshost, self.socksport)
                     self.socks.connect((self.host, self.port))
-                    # print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
-                    print("Connected to host...")
+                    print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
                     break
                 except Exception as e:
-                    # print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
-                    print("Error connecting to host...")
+                    print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
                     print(e)
                     time.sleep(1)
                     sys.exit()
@@ -109,8 +107,7 @@ class httpPost(Thread):
                     self._send_http_post()
                 except Exception as e:
                     if e.args[0] == 32 or e.args[0] == 104:
-                        # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("Thread broken, restarting...")
+                        print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
                         self.socks = socks.socksocket()
                         break
                     time.sleep(0.1)
@@ -174,23 +171,14 @@ def main(argv):
         usage()
         sys.exit(-1)
 
-    # print(term.DOWN + term.RED + "/*" + term.NORMAL)
-    # print(term.RED + " * Target: %s Port: %d" % (target, port) + term.NORMAL)
-    # if tor:
-    #     print(term.RED + " * Threads: %d Tor: %s" % (threads, tor) + term.NORMAL)
-    # elif sockshost and socksport:
-    #     print(term.RED + " * SOCKS host: %s port: %d" % (sockshost, socksport) + term.NORMAL)
-    # print(term.RED + " * Give 20 seconds without tor or 40 with before checking site" + term.NORMAL)
-    # print(term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL)
-
-    print("/*")
-    print(" * Target: %s Port: %d" % (target, port))
+    print(term.DOWN + term.RED + "/*" + term.NORMAL)
+    print(term.RED + " * Target: %s Port: %d" % (target, port) + term.NORMAL)
     if tor:
-        print(" * Threads: %d Tor: %s" % (threads, tor))
+        print(term.RED + " * Threads: %d Tor: %s" % (threads, tor) + term.NORMAL)
     elif sockshost and socksport:
-        print(" * SOCKS host: %s port: %d" % (sockshost, socksport))
-    print(" * Give 20 seconds without tor or 40 with before checking site")
-    print(" */")
+        print(term.RED + " * SOCKS host: %s port: %d" % (sockshost, socksport) + term.NORMAL)
+    print(term.RED + " * Give 20 seconds without tor or 40 with before checking site" + term.NORMAL)
+    print(term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL)
 
     rthreads = []
     for i in range(threads):
