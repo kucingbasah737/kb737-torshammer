@@ -93,11 +93,14 @@ class httpPost(Thread):
                         time.sleep(1)
                     elif self.sockshost:
                         self.socks.set_proxy(socks.SOCKS5, self.sockshost, self.socksport)
+
                     self.socks.connect((self.host, self.port))
-                    print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
+                    # print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
+                    print("Connected to host...\n")
                     break
                 except Exception as e:
-                    print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
+                    # print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
+                    print("Error connecting to host...\n")
                     print(e)
                     time.sleep(1)
                     sys.exit()
@@ -107,7 +110,8 @@ class httpPost(Thread):
                     self._send_http_post()
                 except Exception as e:
                     if e.args[0] == 32 or e.args[0] == 104:
-                        print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
+                        # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
+                        print("Thread broken, restarting...\n")
                         self.socks = socks.socksocket()
                         break
                     time.sleep(0.1)
