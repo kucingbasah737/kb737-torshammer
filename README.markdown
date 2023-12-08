@@ -1,5 +1,9 @@
-----------------------------------------------------
+---------------------------------------------------
 # Use for educational purposes ONLY
+
+**ALPHA VERSION**: WORK IN PROGRESS (WIP).
+
+We still porting this to python3.
 
 ## This is a maintained fork of Torshammer
 - It works with the new TOR port 9050.
