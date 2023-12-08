@@ -120,7 +120,7 @@ class httpPost(Thread):
 
 
 def usage():
-    print("./torshammer.py -t <target> [-r <threads> -p <port> -T -h]")
+    print("./torshammer.py -t <target> [-r <threads>] [-p <port>] [-T] [-S <sockshost> -P <socksport>] [-i <seconds>] [-s <seconds>] [-h]")
     print(" -t|--target <Hostname|IP>")
     print(" -r|--threads <Number of threads> Defaults to 256")
     print(" -p|--port <Web Server Port> Defaults to 80")
@@ -209,6 +209,8 @@ if __name__ == "__main__":
     print(" * entropy [at] phiral.net")
     print(" * Anon-ymized via Tor")
     print(" * We are Legion.")
+    print(" *")
+    print(" * Forked version by KB737 to make it compatible with Python3")
     print(" */\n")
 
     main(sys.argv[1:])
