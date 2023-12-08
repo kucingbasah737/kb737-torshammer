@@ -402,7 +402,7 @@ class httpPost(Thread):
                         print("[%d]: Thread broken, restarting...\n" % self.threadid)
                         self.socks = socks.socksocket()
                         break
-                    time.sleep(0.1)
+                    time.sleep(random.uniform(0.1, 2.0))
                     pass
 
 
