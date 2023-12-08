@@ -1,5 +1,3 @@
-
----------------------------------------------------
 # Use for educational purposes ONLY
 
 ## This is a maintained fork of Torshammer
@@ -8,8 +6,18 @@
   - If you need python 2.x version, please use [Karlheinzniebuhr's torshammer](https://github.com/Karlheinzniebuhr/torshammer)
 
 
-#### TORS HAMMER HOW TO
-----------------------------------------------------
+## TORS HAMMER HOW TO
+
+### Installation
+
+Clone source code
+
+```console
+git clone https://github.com/kucingbasah737/kb737-torshammer
+cd kb737-torshammer
+```
+### Usage
+
 ```console
 python torshammer.py
 ```
