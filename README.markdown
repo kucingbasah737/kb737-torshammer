@@ -61,5 +61,9 @@ programmed to ban IP addresses which leave an open connection for "x" amount of 
 combining this is clever and effective, making it the powerful tool it is. However, Tor'shammer is only effective to
 apache servers which do not run nginx.
 
-### Alternatives
-- Another python3 working fork is from [fckwarship](https://github.com/fckwarship/torshammer).
+### Alternatives Python 3 Forks
+Beside my fork, there are some forks too from [Karlheinzniebuhr's torshammer](https://github.com/Karlheinzniebuhr/torshammer):
+- [fckwarship's torshammer](https://github.com/fckwarship/torshammer).
+  I found it and test it after I create my fork. Many nice optimations has been applied.
+  You might use this fork beside mine for more simple option.
+- [Mr-Destoryer's torshammer](https://github.com/Mr-Destroyer/torshammer).
