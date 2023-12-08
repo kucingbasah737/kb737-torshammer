@@ -62,4 +62,4 @@ combining this is clever and effective, making it the powerful tool it is. Howev
 apache servers which do not run nginx.
 
 ### Alternatives
-- Another python3 working for is from [fckwarship](https://github.com/fckwarship/torshammer).
+- Another python3 working fork is from [fckwarship](https://github.com/fckwarship/torshammer).
