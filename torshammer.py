@@ -379,7 +379,8 @@ class httpPost(Thread):
                 self.running = False
                 break
             p = random.choice(string.ascii_letters+string.digits)
-            if is_verbose: print(term.BOL+term.UP+term.CLEAR_EOL+"[%d]: Posting: %s" % (self.threadid, p+term.NORMAL))
+            if is_verbose:
+                print(term.BOL+term.UP+term.CLEAR_EOL+"[%03d] Posting: %s" % (self.threadid, p+term.NORMAL))
             self.socks.send(p)
             self.sentcount = i
             time.sleep(random.uniform(0.1, maxsecondsbetweenpacket))
@@ -401,11 +402,11 @@ class httpPost(Thread):
 
                     self.socks.connect((self.host, self.port))
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
-                    print("[%d] %s: Connected to host (%d threads running)\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), runningthreadcount))
+                    print("[%03d] %s: Connected to host (%d threads running)\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), runningthreadcount))
                     break
                 except Exception as e:
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
-                    print("[%d] %s: Error connecting to host...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S')))
+                    print("[%03d] %s: Error connecting to host...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S')))
                     print(e)
                     time.sleep(1)
                     sys.exit()
@@ -418,7 +419,7 @@ class httpPost(Thread):
 
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("[%d] %s: Thread broken after sending %d packets, restarting in %f seconds ...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), self.sentcount, sleeptime))
+                        print("[%03d] %s: Thread broken after sending %d packets, restarting in %f seconds ...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), self.sentcount, sleeptime))
                         self.socks = socks.socksocket()
                         break
 
@@ -451,6 +452,7 @@ def main(argv):
     global presleepbetweenthreadstart
     global maxsecondsbetweenpacket
     global runningthreadcount
+    global is_verbose
 
     target = ''
     threads = 256
