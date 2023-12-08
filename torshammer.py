@@ -380,6 +380,8 @@ class httpPost(Thread):
         # self.socks.close()
 
     def run(self):
+        global presleepbetweenthreadstart
+
         while self.running:
             while self.running:
                 try:
@@ -437,6 +439,7 @@ def main(argv):
         sys.exit(-1)
 
     global stop_now
+    global presleepbetweenthreadstart
 
     target = ''
     threads = 256
