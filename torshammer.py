@@ -396,7 +396,7 @@ class httpPost(Thread):
 
                     self.socks.connect((self.host, self.port))
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
-                    print("[%d] %s: Connected to host (%d threads running)\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), runningthreadcount + 1))
+                    print("[%d] %s: Connected to host (%d threads running)\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), runningthreadcount))
                     break
                 except Exception as e:
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
@@ -489,7 +489,7 @@ def main(argv):
     print(term.RED + " */" + term.DOWN + term.DOWN + term.NORMAL)
 
     rthreads = []
-    for runningthreadcount in range(threads):
+    for runningthreadcount in range(1, threads + 1):
         t = httpPost(runningthreadcount, target, port, tor, sockshost, socksport)
         rthreads.append(t)
         t.start()
