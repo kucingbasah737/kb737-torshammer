@@ -21,10 +21,14 @@ import terminal
 from threading import Thread
 
 global stop_now
-global term
-
 stop_now = False
+
+global term
 term = terminal.TerminalController()
+
+global presleepbeetweenthreadstart
+presleepbeetweenthreadstart = None
+
 
 useragents = [
     "curl/7.85.0"
@@ -399,12 +403,15 @@ class httpPost(Thread):
                 try:
                     self._send_http_post()
                 except Exception as e:
+                    sleeptime = random.uniform(0.1, presleepbeetweenthreadstart or 2.0)
+
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("[%d]: Thread broken after sending %d packets, restarting...\n" % (self.threadid, self.sentcount))
+                        print("[%d]: Thread broken after sending %d packets, restarting in %f seconds ...\n" % (self.threadid, self.sentcount, sleeptime))
                         self.socks = socks.socksocket()
                         break
-                    time.sleep(random.uniform(0.1, 2.0))
+
+                    time.sleep(sleeptime)
                     pass
 
 
@@ -420,7 +427,6 @@ def usage():
     print(" -s|--pre-sleep-on-thread-start <max seconds beetween starting threads> Default to none")
     print(" -h|--help Shows this help\n")
     print("Eg. ./torshammer.py -t 192.168.1.100 -r 256\n")
-
 
 def main(argv):
     try:
@@ -438,7 +444,6 @@ def main(argv):
     sockshost = False
     socksport = 1080
     maxsecondsbeetweenpacket = 3
-    presleepbeetweenthreadstart = None
 
     for o, a in opts:
         if o in ("-h", "--help"):
