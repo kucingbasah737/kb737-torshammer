@@ -10,7 +10,6 @@
 # kills apache 1.X with ~128, apache 2.X / IIS with ~256
 # not effective on nginx
 
-from tabnanny import verbose
 import time
 import sys
 import random
