@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-# this is a fork for python 3.x
+# This is a fork for python 3.x.
+# Latest version can be found on https://github.com/kucingbasah737/kb737-torshammer
 #
 # this assumes you have the socks.py (http://phiral.net/socks.py)
 # and terminal.py (http://phiral.net/terminal.py) in the
