@@ -19,6 +19,7 @@ import string
 import terminal
 
 from threading import Thread
+from datetime import datetime
 
 global stop_now
 stop_now = False
@@ -390,11 +391,11 @@ class httpPost(Thread):
 
                     self.socks.connect((self.host, self.port))
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Connected to host..."+ term.NORMAL)
-                    print("[%d]: Connected to host...\n" % self.threadid)
+                    print("[%d] %s: Connected to host...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S')))
                     break
                 except Exception as e:
                     # print(term.BOL+term.UP+term.CLEAR_EOL+"Error connecting to host..."+ term.NORMAL)
-                    print("[%d]: Error connecting to host...\n" % self.threadid)
+                    print("[%d] %s: Error connecting to host...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S')))
                     print(e)
                     time.sleep(1)
                     sys.exit()
@@ -407,7 +408,7 @@ class httpPost(Thread):
 
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("[%d]: Thread broken after sending %d packets, restarting in %f seconds ...\n" % (self.threadid, self.sentcount, sleeptime))
+                        print("[%d] %s: Thread broken after sending %d packets, restarting in %f seconds ...\n" % (self.threadid, datetime.now().strftime('%H:%M:%S'), self.sentcount, sleeptime))
                         self.socks = socks.socksocket()
                         break
 
