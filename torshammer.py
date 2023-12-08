@@ -346,6 +346,7 @@ class httpPost(Thread):
         self.socksport = socksport
         self.maxsecondsbeetweenpacket = maxsecondsbeetweenpacket
         self.running = True
+        self.sentcount = 0
 
     def _send_http_post(self, pause=10):
         global stop_now
@@ -368,6 +369,7 @@ class httpPost(Thread):
             p = random.choice(string.ascii_letters+string.digits)
             print(term.BOL+term.UP+term.CLEAR_EOL+"[%d]: Posting: %s" % (self.threadid, p+term.NORMAL))
             self.socks.send(p)
+            self.sentcount += 1
             time.sleep(random.uniform(0.1, maxsecondsbeetweenpacket))
 
         # self.socks.close()
@@ -399,7 +401,7 @@ class httpPost(Thread):
                 except Exception as e:
                     if e.args[0] == 32 or e.args[0] == 104:
                         # print(term.BOL + term.UP + term.CLEAR_EOL + "Thread broken, restarting..." + term.NORMAL)
-                        print("[%d]: Thread broken, restarting...\n" % self.threadid)
+                        print("[%d]: Thread broken after sending %d packets, restarting...\n" % (self.threadid, self.sentcount))
                         self.socks = socks.socksocket()
                         break
                     time.sleep(random.uniform(0.1, 2.0))
